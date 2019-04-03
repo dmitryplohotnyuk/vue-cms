@@ -1,0 +1,107 @@
+[
+  {
+    "age_group": "0 ~ 4",
+    "male": 2456000,
+    "female": 2340000
+  },
+  {
+    "age_group": "5 ~ 9",
+    "male": 2632000,
+    "female": 2509000
+  },
+  {
+    "age_group": "10 ~ 14",
+    "male": 2742000,
+    "female": 2614000
+  },
+  {
+    "age_group": "15 ~ 19",
+    "male": 3004000,
+    "female": 2846000
+  },
+  {
+    "age_group": "20 ~ 24",
+    "male": 3055000,
+    "female": 2895000
+  },
+  {
+    "age_group": "25 ~ 29",
+    "male": 3033000,
+    "female": 2904000
+  },
+  {
+    "age_group": "30 ~ 34",
+    "male": 3437000,
+    "female": 3314000
+  },
+  {
+    "age_group": "35 ~ 39",
+    "male": 3837000,
+    "female": 3712000
+  },
+  {
+    "age_group": "40 ~ 44",
+    "male": 4593000,
+    "female": 4445000
+  },
+  {
+    "age_group": "45 ~ 49",
+    "male": 4781000,
+    "female": 4648000
+  },
+  {
+    "age_group": "50 ~ 54",
+    "male": 4099000,
+    "female": 4032000
+  },
+  {
+    "age_group": "55 ~ 59",
+    "male": 3767000,
+    "female": 3769000
+  },
+  {
+    "age_group": "60 ~ 64",
+    "male": 3738000,
+    "female": 3834000
+  },
+  {
+    "age_group": "65 ~ 69",
+    "male": 4584000,
+    "female": 4891000
+  },
+  {
+    "age_group": "70 ~ 74",
+    "male": 3788000,
+    "female": 4280000
+  },
+  {
+    "age_group": "75 ~ 79",
+    "male": 3031000,
+    "female": 3745000
+  },
+  {
+    "age_group": "80 ~ 84",
+    "male": 2188000,
+    "female": 3152000
+  },
+  {
+    "age_group": "85 ~ 89",
+    "male": 1213000,
+    "female": 2275000
+  },
+  {
+    "age_group": "90 ~ 94",
+    "male": 441000,
+    "female": 1203000
+  },
+  {
+    "age_group": "95 ~ 99",
+    "male": 75000,
+    "female": 358000
+  },
+  {
+    "age_group": 100,
+    "male": 9000,
+    "female": 61000
+  }
+]

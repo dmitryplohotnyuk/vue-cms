@@ -1,0 +1,805 @@
+{
+    "labor": {
+        "title": "Labor",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "monthly",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "min": 1,
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "division",
+                "title": "division",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": false
+            },
+            {
+                "order": 2,
+                "name": "cost",
+                "type": "cost",
+                "title": "base salary",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": false
+            },
+            {
+                "order": 3,
+                "name": "overtime",
+                "title": "overtime pay",
+                "type": "currency",
+                "min": 0,
+                "help": "",
+                "required": false
+            },
+            {
+                "order": 4,
+                "name": "commuting",
+                "title": "commuting allowance",
+                "type": "currency",
+                "min": 0,
+                "help": "",
+                "required": false
+            },
+            {
+                "order": 5,
+                "name": "welfare",
+                "title": "statutory welfare expenses",
+                "type": "currency",
+                "min": 0,
+                "help": "",
+                "required": false
+            },
+            {
+                "order": 6,
+                "name": "bonus",
+                "title": "bonuses & incentive pays",
+                "type": "currency",
+                "min": 0,
+                "help": "",
+                "required": false
+            },
+            {
+                "order": 7,
+                "name": "retirement",
+                "title": "retirement pay",
+                "type": "currency",
+                "min": 0,
+                "help": "",
+                "required": false
+            }
+        ]
+    },
+    "subcontracting": {
+        "title": "Subcontracting & Outsourcing Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "raw_materials_parts": {
+        "title": "Raw Materials & Parts",
+        "cost_type": [
+            "cogm",
+            "cogs"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "monthly",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "tools_equipment": {
+        "title": "Tools & Equipment",
+        "cost_type": [
+            "cogm",
+            "cogs"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "communication": {
+        "title": "Communication Expenses",
+        "cost_type": [
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "internet": {
+        "title": "Internet Related Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "provider name",
+                "type": "contact",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 3,
+                "name": "service",
+                "title": "service name",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": false
+            }
+        ]
+    },
+    "professional_services": {
+        "title": "Professional Services",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "rent": {
+        "title": "Rent",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "utility": {
+        "title": "Utility Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "provider name",
+                "type": "contact",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 3,
+                "name": "service",
+                "title": "service name",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": false
+            }
+        ]
+    },
+    "consumables": {
+        "title": "Consumables",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "delivery": {
+        "title": "Packing & Delivery Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "duties": {
+        "title": "Custom Taxes & Duties",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "depreciation": {
+        "title": "Depreciation Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "travel": {
+        "title": "Travel & Accommodation Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "provider name",
+                "type": "contact",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 3,
+                "name": "service",
+                "title": "service name",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": false
+            }
+        ]
+    },
+    "maintainance": {
+        "title": "Maintenance Expenses",
+        "cost_type": [
+            "cogm",
+            "cogs",
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "vendor",
+                "type": "contact",
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "promotion": {
+        "title": "Ads & Promotion Expenses",
+        "cost_type": [
+            "opex"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration",
+            "master"
+        ],
+        "recurrence": "any",
+        "fields": [
+            {
+                "order": 0,
+                "name": "name",
+                "title": "title",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 1,
+                "name": "subcategory",
+                "title": "subcategory",
+                "type": "select",
+                "help": "",
+                "required": true,
+                "default": "other",
+                "values": {
+                    "online": "Online Advertising",
+                    "offline": "Offline Advertising",
+                    "pr": "Public Relations",
+                    "sns": "Social Media",
+                    "seo": "SEO",
+                    "research": "Market Research",
+                    "email": "Email Marketing",
+                    "campaign": "Sales Campaign",
+                    "other": "Other"
+                }
+            },
+            {
+                "order": 2,
+                "name": "contact",
+                "title": "provider name",
+                "type": "contact",
+                "help": "",
+                "max": 40,
+                "required": true
+            },
+            {
+                "order": 3,
+                "name": "service",
+                "title": "service name",
+                "type": "text",
+                "help": "",
+                "max": 40,
+                "required": false
+            },
+            {
+                "order": 4,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": true
+            }
+        ]
+    },
+    "revenue": {
+        "title": "Revenue",
+        "cost_type": [
+            "revenue"
+        ],
+        "input_type": [
+            "manual",
+            "csv",
+            "integration"
+        ],
+        "fields": [
+            {
+                "order": 0,
+                "name": "cost",
+                "type": "cost",
+                "title": "unit price",
+                "title2": "quantity",
+                "min": 0,
+                "help": "",
+                "required": false
+            },
+            {
+                "order": 1,
+                "name": "contact",
+                "title": "customer",
+                "type": "contact",
+                "help": "",
+                "required": false
+            }
+        ]
+    }
+}

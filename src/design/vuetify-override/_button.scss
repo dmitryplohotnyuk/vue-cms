@@ -1,0 +1,20 @@
+.theme--light.v-btn.v-btn--outline {
+    border-color: #dfdfdf;
+}
+.theme--light.v-btn-toggle {
+    box-shadow: none;
+    &.v-btn--active {
+        background-color: indigo;
+        .v-btn__content {
+            color: rgba(33, 33, 33, 0.6);
+        }
+    }
+}
+.v-btn-toggle {
+    .v-btn.v-btn--outline {
+        box-shadow: inset 0 -1px 3px 0 #ffffff80;
+        &:not(:last-child) {
+            border-right: none;
+        }
+    }
+}

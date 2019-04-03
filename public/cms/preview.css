@@ -1,0 +1,109 @@
+/* General */
+.muted {
+    opacity: 0.7;
+}
+.flex-centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-input:not(:placeholder-shown):invalid {
+    border-color: #bcc3ce;
+}
+.no-content-margin p{
+    margin: 0;
+}
+
+/* Buttons */
+.btn:focus,
+.btn:hover {
+    opacity: 0.9;
+}
+
+/* Scroll */
+html::-webkit-scrollbar {
+    width: 5px;
+}
+
+html::-webkit-scrollbar-track {
+    background: #ddd;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: #666;
+}
+
+/* Header */
+.navbar img {
+    max-height: 36px;
+    vertical-align: middle;
+}
+.navbar .navbar-section--mobile-menu {
+    flex-shrink: 1;
+}
+.navbar .navbar-section--brand {
+    flex-grow: 10;
+}
+
+/* Hero */
+.hero {
+    justify-content: center;
+}
+.hero::before,
+.carousel-item:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: #3d4246;
+    opacity: 0.4;
+    z-index: 1;
+}
+.hero-body {
+    z-index: 2;
+}
+.hero-heading--small {
+    font-size: 1.8rem;
+}
+.hero-heading--large {
+    font-size: 3rem;
+}
+.hero-text--medium {
+    font-size: 18px;
+}
+.hero-text--large {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Plans */
+.plan-header--small {
+    font-size: 14px;
+}
+.plan-header--medium {
+    font-size: 18px;
+}
+.plan-header--large {
+    font-size: 24px;
+}
+.plan-text--small {
+    font-size: 14px;
+}
+.plan-text--medium {
+    font-size: 16px;
+}
+.plan-text--large {
+    font-size: 20px;
+}
+
+/* Carousel */
+.carousel .carousel-item .figure-caption {
+    top: 40%;
+    left: 0;
+    right: 0;
+    width: auto;
+    z-index: 3;
+    position: absolute;
+}

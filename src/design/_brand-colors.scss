@@ -1,0 +1,24 @@
+$brand-colors: (
+    primary: color('indigo', 'darken-2'),
+    secondary: color('indigo', 'base'),
+    accent: #4ebcd4,
+    error: #f55e53,
+    info: #bdbdbd,
+    success: #009688,
+    warning: #e5aa17,
+    darkgrey: #757575,
+    danger: #d65249
+);
+
+// Color Classes
+@each $color, $color_value in $brand-colors {
+    .#{$color} {
+        background-color: $color_value !important;
+    }
+    .#{$color}--text {
+        color: $color_value !important;
+    }
+    .#{$color}--border {
+        border: 1px solid $color_value !important;
+    }
+}

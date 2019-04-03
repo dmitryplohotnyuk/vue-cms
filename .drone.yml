@@ -1,0 +1,94 @@
+branches:
+  - develop
+  - master
+pipeline:
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - ./node_modules
+    # Mount the cache volume, needs "Trusted"
+    volumes:
+      - /tmp/cache:/cache
+    cache_key: [ DRONE_REPO_OWNER, DRONE_REPO_NAME, DRONE_BRANCH, DRONE_JOB_NUMBER ]
+
+  get-dependencies:
+    image: node:latest
+    commands:
+      - yarn install
+
+  update-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - ./node_modules
+    # Mount the cache volume, needs "Trusted"
+    cache_key: [ DRONE_REPO_OWNER, DRONE_REPO_NAME, DRONE_BRANCH, DRONE_JOB_NUMBER ]
+    volumes:
+      - /tmp/cache:/cache
+
+  build_dev:
+    when:
+      branch: develop
+    image: node:latest
+    secrets: [ dev_stripe_key ]
+    commands:
+      - export VUE_APP_STRIPE_KEY=$${DEV_STRIPE_KEY}
+      - yarn dev-build
+
+  build:
+    when:
+      branch: master
+    image: node:latest
+    secrets: [ prod_stripe_key ]
+    commands:
+      - export VUE_APP_STRIPE_KEY=$${PROD_STRIPE_KEY}
+      - yarn build
+
+  deploy_dev:
+    when:
+      branch: develop
+      event: push
+    image: alpine
+    volumes:
+      - /var/www/dev/frontend:/var/www/dev/frontend
+    commands:
+      - apk add -U rsync
+      - rsync -r --exclude='/.git' ./dist/ /var/www/dev/frontend
+
+  deploy:
+    when:
+      branch: master
+    image: alpine
+    volumes:
+      - /var/www/frontend:/var/www/frontend
+    commands:
+      - apk add -U rsync
+      - rsync -r --exclude='/.git' ./dist/ /var/www/frontend
+
+  deploy:
+    when:
+      branch: master
+    image: drillster/drone-rsync
+    hosts: [ "app.kinchaku.com" ]
+    network_mode: host
+    user: root
+    port: 6534
+    source: ./dist/
+    target: /var/www/frontend_new
+    recursive: true
+    delete: true
+    secrets: [ rsync_key ]
+    script:
+      - mv /var/www/frontend_new /var/www/frontend_${DRONE_COMMIT_SHA}
+      - ln -s -n -f -T /var/www/frontend_${DRONE_COMMIT_SHA} /var/www/frontend
+
+  notify:
+    when:
+      event: push
+    image: plugins/slack
+    channel: git
+    secrets: [slack_webhook]
+    when:
+      status: [ success, failure ]

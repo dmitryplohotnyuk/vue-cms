@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8" />
+        <title>KICKSTART</title>
+        <meta name="viewport" content="width=device-width,minimum-scale=1,initial-scale=1" />
+        <link rel="stylesheet" href="assets/spectre.min.css" />
+        <script src="https://js.stripe.com/v3/"></script>
+        <style type="text/css" media="screen">
+            html {
+                --primary-color: #5755d9;
+                --secondary-color: #f1f1fc;
+            }
+            .StripeElement {
+                background-color: white;
+                height: 36px;
+                padding: 6px 8px;
+                border-radius: 4px;
+                border: 1px solid transparent;
+                box-shadow: 0 1px 3px 0 #e6ebf1;
+                -webkit-transition: box-shadow 150ms ease;
+                transition: box-shadow 150ms ease;
+            }
+
+            .StripeElement--focus {
+                box-shadow: 0 1px 3px 0 #cfd7df;
+            }
+
+            .StripeElement--invalid {
+                border-color: #fa755a;
+            }
+
+            .StripeElement--webkit-autofill {
+                background-color: #fefde5 !important;
+            }
+
+            a:focus {
+                box-shadow: none;
+            }
+        </style>
+    </head>
+
+    <body style="background: transparent">
+        <style id="styles" media="screen">
+            /* Dynamic styles here */
+        </style>
+        <div id="kickstart-modal" class="modal modal-lg active">
+            <a href="#close" class="modal-overlay" aria-label="Close" onclick="return false"></a>
+            <div class="modal-container">
+                <div class="modal-header">
+                    <button
+                        class="btn btn-clear float-right"
+                        onclick="toggleModal()"
+                        aria-label="Close"
+                    ></button>
+                    <div class="modal-title h5">サブスクリプション</div>
+                </div>
+                <div class="modal-body">
+                    <br />
+                    <ul class="step">
+                        <li id="plan-selection" class="step-item active">
+                            <a
+                                href="#"
+                                class="tooltip"
+                                data-tooltip="会員情報登録"
+                                onclick="goToStep(0)"
+                                >選択したプラン</a
+                            >
+                        </li>
+                        <li id="member-registration" class="step-item">
+                            <a
+                                href="#"
+                                class="tooltip"
+                                data-tooltip="会員情報登録"
+                                onclick="goToStep(1)"
+                                >会員登録</a
+                            >
+                        </li>
+                        <li id="payment" class="step-item">
+                            <a href="#" class="tooltip" data-tooltip="決済" onclick="goToStep(2)"
+                                >決済</a
+                            >
+                        </li>
+                    </ul>
+                    <br />
+                    <div id="error" class="toast toast-error my-2 d-hide">
+                        <button class="btn btn-clear float-right" onclick="toggleError()"></button>
+                        <p id="error-message"></p>
+                    </div>
+                    <div id="form-step-1" class="form-step">
+                        <div id="plans" class="columns"></div>
+                    </div>
+                    <div id="form-step-2" class="form-step d-hide">
+                        <div id="success-registration" class="toast toast-success my-2 d-hide">
+                            <p>You have been successfully registered.</p>
+                        </div>
+                        <form id="form-registration" method="post" action="#">
+                            <div class="columns">
+                                <div class="column col-6 col-xs-12 mb-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="name">お名前</label>
+                                        <input
+                                            class="form-input"
+                                            type="text"
+                                            name="name"
+                                            placeholder="姓"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="column col-6 col-xs-12 mb-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="email">メール</label>
+                                        <input
+                                            class="form-input"
+                                            type="email"
+                                            name="email"
+                                            placeholder="メール"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column col-6 col-xs-12 mb-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="password">パスワード</label>
+                                        <input
+                                            class="form-input"
+                                            type="password"
+                                            name="password"
+                                            placeholder="パスワード"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns my-2">
+                                <div class="column col-4 col-auto col-mx-auto">
+                                    <div class="form-group mt-2">
+                                        <button class="btn btn-primary mt-2" type="submit">
+                                            進む
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div id="form-step-3" class="form-step d-hide">
+                        <table class="table mb-2">
+                            <tbody>
+                                <tr>
+                                    <td class="text-gray">選択したプラン</td>
+                                    <td class="text-right" data-render="selected-plan-name"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-gray">料金</td>
+                                    <td class="text-right" data-render="selected-plan-price"></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-gray">消費税 <span id="tax-rate">8%</span></td>
+                                    <td class="text-right" data-render="tax-calculated"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" class="bg-gray p-2 text-right">
+                                        <span
+                                            class="text-primary h5"
+                                            data-render="total-calculated"
+                                        ></span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <form id="form-payment" method="post" action="#">
+                            <div class="columns">
+                                <div class="column col-12 mb-2">
+                                    <div class="form-group">
+                                        <label class="form-label" for="credit-card-number"
+                                            >クレジットカード番号</label
+                                        >
+                                        <div id="card-element">
+                                            <!-- A Stripe Element will be inserted here. -->
+                                        </div>
+
+                                        <!-- Used to display form errors. -->
+                                        <div
+                                            id="card-errors"
+                                            class="form-input-hint"
+                                            role="alert"
+                                        ></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column col-sm-12 col-6 mb-1">
+                                    <div class="form-group">
+                                        <label class="form-label" for="name">姓</label>
+                                        <input
+                                            class="form-input"
+                                            type="text"
+                                            name="name"
+                                            placeholder="姓"
+                                        />
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label class="form-label" for="coupon">割引コード</label>
+                                        <input
+                                            class="form-input"
+                                            type="text"
+                                            name="coupon"
+                                            placeholder="割引コード"
+                                        />
+                                    </div> -->
+                                </div>
+                                <div class="column col-sm-12 col-6 mb-1">
+                                    <div class="my-2 py-2 px-2 text-right">
+                                        <small class="text-error mr-2">割引金額</small>
+                                        <small
+                                            class="text-error"
+                                            data-render="discount-calculated"
+                                        ></small>
+                                        <br />
+                                        <span class="text-primary mr-2">支払合計</span>
+                                        <span
+                                            class="text-primary h5"
+                                            data-render="total-to-pay"
+                                        ></span>
+                                    </div>
+                                </div>
+                                <div class="column col-4 col-auto col-mx-auto">
+                                    <div class="form-group mt-2">
+                                        <button class="btn btn-primary mt-2" type="submit">
+                                            進む
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="success" class="toast toast-success my-2 d-hide">
+                            <p>You have been successfully subscribed! Thank you.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            if (!window.fetch) {
+                document.write(
+                    '<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.4/fetch.min.js"><\/script>'
+                )
+            }
+        </script>
+        <script>
+            var PREVIEW = Boolean(getParameterByName('preview')) // TODO: init `PREVIEW` on server from get params
+            var server = 'https://dev.kinchaku.com' // https://dev.kinchaku.com
+            var projectId =
+                getParameterByName('projectid') || '41719a97-199b-4514-8389-7b4de322f69f'
+            // global data store
+            var store = {
+                plan: { id: null, name: '' },
+                maxStep: 0,
+                // TODO: fill with plans on server (plans and their settings must be merged)
+                plans: [
+                    {
+                        id: '494022a1-7b01-4dda-9055-a7128935af98',
+                        product_id: '80310a64-77f4-44e0-95cc-681456dfc430',
+                        name: 'Free',
+                        interval: 'month',
+                        payment_id: null,
+                        payment_type: null,
+                        currency: 'jpy',
+                        amount: 0,
+                        interval_count: 1,
+                        trial_days: 0,
+                        billing_day: null,
+                        billing_scheme: 'per_unit',
+                        meta: null,
+                        created_at: '2019-02-22 17:14:14',
+                        updated_at: '2019-03-14 17:28:02',
+                        deleted_at: null,
+                        description: null,
+                        addons: null,
+                        tax_included: false,
+                    },
+                    {
+                        id: '8d3408b4-f4f8-4658-b561-324f56a1909e',
+                        product_id: '80310a64-77f4-44e0-95cc-681456dfc430',
+                        name: 'Basic',
+                        interval: 'month',
+                        payment_id: null,
+                        payment_type: 'stripe',
+                        currency: 'jpy',
+                        amount: 100,
+                        interval_count: 1,
+                        trial_days: 0,
+                        billing_day: null,
+                        billing_scheme: 'per_unit',
+                        meta: null,
+                        created_at: '2019-03-14 15:50:38',
+                        updated_at: '2019-03-14 15:50:38',
+                        deleted_at: null,
+                        description: null,
+                        addons: null,
+                        tax_included: false,
+                    }
+                ],
+            }
+            var currencyMap = {
+                usd: '＄',
+                jpy: '￥',
+                eur: '€',
+            }
+            //init forms variables
+            var formRegistration = document.getElementById('form-registration')
+            var formPayment = document.getElementById('form-payment')
+            // render plans
+            renderPlans(store.plans)
+
+            // Create a Stripe client.
+            var stripe = Stripe('pk_test_WhCSwbHWCns0xW8p5FVsCswI')
+
+            // Create an instance of Elements.
+            var elements = stripe.elements({
+                locale: 'ja',
+            })
+
+            // Custom styling can be passed to options when creating an Element.
+            // (Note that this demo uses a wider set of styles than the guide below.)
+            var style = {
+                base: {
+                    color: '#32325d',
+                    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                    fontSmoothing: 'antialiased',
+                    fontSize: '16px',
+                    '::placeholder': {
+                        color: '#aab7c4',
+                    },
+                },
+                invalid: {
+                    color: '#fa755a',
+                    iconColor: '#fa755a',
+                },
+            }
+
+            // Create an instance of the card Element.
+            var card = elements.create('card', { style: style, hidePostalCode: true })
+
+            // Add an instance of the card Element into the `card-element` <div>.
+            card.mount('#card-element')
+
+            // navigate to a step: 0,1,2
+            function goToStep(step) {
+                if (step > store.maxStep) {
+                    return
+                }
+                var pills = document.querySelectorAll('.step-item')
+                for (var i = 0; i < pills.length; i++) {
+                    if (i == step) {
+                        pills[i].classList.add('active')
+                    } else {
+                        pills[i].classList.remove('active')
+                    }
+                }
+                var steps = document.querySelectorAll('.form-step')
+                for (var i = 0; i < steps.length; i++) {
+                    if (i == step) {
+                        steps[i].classList.remove('d-hide')
+                    } else {
+                        steps[i].classList.add('d-hide')
+                    }
+                }
+                if (step == 2) {
+                    var plan = store.plan
+                    var amount = plan.amount || 0
+                    var currency = plan.currency || 'jpy'
+                    var currencyCharacter = currencyMap[currency]
+                    var tax = amount * 0.08
+                    if (plan.currency == 'jpy') {
+                        tax = Math.ceil(tax)
+                    }
+                    var discount = 0
+                    var total = amount + tax - discount
+                    render({
+                        'selected-plan-name': plan.name,
+                        'selected-plan-price': currencyCharacter + amount,
+                        'tax-calculated': currencyCharacter + tax,
+                        'total-calculated': currencyCharacter + (amount + tax),
+                        'discount-calculated': '-' + currencyCharacter + discount,
+                        'total-to-pay': currencyCharacter + total,
+                    })
+                }
+            }
+            // close modal dialog - just sent message to parent window
+            var toggleModal = function() {
+                window.parent.postMessage('close', window.location)
+            }
+            // first step - handles plan selection
+            function choosePlan(index) {
+                plan = store.plans[index]
+                store.plan = plan
+                store.maxStep = store.user ? 2 : 1
+                goToStep(store.user ? 2 : 1)
+            }
+            // changes innerText of all elements with [data-render] attribute
+            function render(data) {
+                Object.keys(data).forEach(function(key) {
+                    var elems = document.querySelectorAll('[data-render="' + key + '"]')
+                    elems.forEach(function(el) {
+                        el.innerText = data[key]
+                    })
+                })
+            }
+            // render plans for first step
+            function renderPlans(plansSettings) {
+                var html = plansSettings
+                    .map(function(plan, index) {
+                        return (
+                            '<div class="column col-6 col-xs-12"><div class="card mb-2">' +
+                            '<div class="card-header plan-header--medium">' +
+                            plan.name +
+                            '</div>' +
+                            '<div class="card-body py-4 text-center plan-text--medium">' +
+                            '<p class="card-subtitle mb-4 muted"><span>' +
+                            currencyMap[plan.currency] +
+                            plan.amount +
+                            '</span></p><p class="card-text lang-ja">' +
+                            (plan.description || '-') +
+                            '</p>' +
+                            '<a href="#" class="btn mt-4" onclick="choosePlan(' +
+                            index +
+                            ')" data-render="subscribe_text" >選ぶ</a>' +
+                            '</div></div></div>'
+                        )
+                    })
+                    .join('')
+                document.getElementById('plans').innerHTML = html
+            }
+            // display error
+            function toggleError(message) {
+                var error = document.getElementById('error')
+                if (message) {
+                    var errorMessage = document.getElementById('error-message')
+                    errorMessage.innerText = message
+                    error.classList.remove('d-hide')
+                } else {
+                    error.classList.add('d-hide')
+                }
+            }
+
+            // parse url params
+            function getParameterByName(name, url) {
+                if (!url) url = window.location.href
+                name = name.replace(/[\[\]]/g, '\\$&')
+                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                    results = regex.exec(url)
+                if (!results) return null
+                if (!results[2]) return ''
+                return decodeURIComponent(results[2].replace(/\+/g, ' '))
+            }
+
+            // PRODUCTION MODE ---------------------
+            if (!PREVIEW) {
+                // CODE FOR REAL MODE
+                formRegistration.onsubmit = submitRegister
+                formPayment.onsubmit = submitPayment
+                goToStep(0)
+                checkLogin()
+                // Handle real-time validation errors from the card Element.
+                card.addEventListener('change', displayCardError)
+
+                // displays stripe card error
+                function displayCardError(event) {
+                    var displayError = document.getElementById('card-errors')
+                    if (event.error) {
+                        displayError.textContent = event.error.message
+                        displayError.parentElement.classList.add('has-error')
+                    } else {
+                        displayError.textContent = ''
+                        displayError.parentElement.classList.remove('has-error')
+                    }
+                }
+
+                function getFormDataJSON(formData) {
+                    var body = {}
+                    formData.forEach(function(value, key) {
+                        body[key] = value
+                    })
+                    return body
+                }
+
+                // automatic login
+                function checkLogin() {
+                    var url = server + '/api/kickstart/' + projectId + '/profile'
+                    fetch(url, {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                    })
+                        .then(function(response) {
+                            if (response.ok) {
+                                store.user = {}
+                                formRegistration.classList.add('d-hide')
+                                document
+                                    .getElementById('success-registration')
+                                    .classList.remove('d-hide')
+                            }
+                        })
+                        .catch(function(e) {
+                            console.log(e)
+                        })
+                }
+
+                // second step - registration form handler
+                function submitRegister(e) {
+                    e.preventDefault()
+                    toggleError() // hide error
+                    var data = getFormDataJSON(new FormData(formRegistration))
+                    if (!data.email || !data.password) {
+                        toggleError('Email and password are required')
+                        return
+                    }
+                    var url = server + '/api/kickstart/' + projectId + '/register'
+                    fetch(url, {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        method: 'POST',
+                        body: JSON.stringify(data),
+                    })
+                        .then(function(response) {
+                            if (!response.ok) {
+                                toggleError('An error occured. Check your connection please.')
+                            } else {
+                                store.maxStep = 2
+                                goToStep(2)
+                                formRegistration.classList.add('d-hide')
+                                document
+                                    .getElementById('success-registration')
+                                    .classList.remove('d-hide')
+                            }
+                        })
+                        .catch(function(e) {
+                            console.log(e)
+                            toggleError('error')
+                        })
+                    return false
+                }
+
+                // second step - registration form handler
+                function submitPayment(e) {
+                    e.preventDefault()
+                    toggleError() // hide error
+                    var data = getFormDataJSON(new FormData(formPayment))
+                    stripe.createToken(card, { name: data.name }).then(function(result) {
+                        if (result.error) {
+                            displayCardError(result)
+                        } else {
+                            // Send the token to your server.
+                            stripeTokenHandler(result.token)
+                        }
+                    })
+                    return false
+                }
+
+                // Submit the form with the token ID.
+                function stripeTokenHandler(token) {
+                    toggleError() // hide error
+                    // Insert the token ID into the form so it gets submitted to the server
+                    var formData = new FormData(formPayment)
+                    formData.append('token', token.id)
+                    formData.append('plan_id', store.plan.id)
+                    var url = server + '/api/kickstart/' + projectId + '/subscribe'
+                    fetch(url, {
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json',
+                        },
+                        credentials: 'include',
+                        method: 'POST',
+                        body: JSON.stringify(getFormDataJSON(formData)),
+                    }).then(function(response) {
+                        if (!response.ok) {
+                            toggleError('An error occured. Check your connection please.')
+                        } else {
+                            // handle success
+                            formPayment.classList.add('d-hide')
+                            document.getElementById('success').classList.remove('d-hide')
+                        }
+                    })
+                }
+            }
+            // PRODUCTION MODE ---------------------
+
+            // CODE BELOW IS ONLY FOR PREVIEW MODE ------------------------------------------
+            if (PREVIEW) {
+                var toggleModal = function() {}
+                store.maxStep = 2
+                enablePreviewMode()
+                goToStep(Number(getParameterByName('step')) || 0)
+
+                function enablePreviewMode() {
+                    document.querySelectorAll('a').forEach(function(el) {
+                        el.href = 'javascript:void(0)'
+                        el.onclick = ''
+                    })
+                    document.querySelectorAll('form').forEach(function(el) {
+                        el.addEventListener('submit', function(evt) {
+                            evt.preventDefault()
+                        })
+                    })
+
+                    window.addEventListener(
+                        'message',
+                        function(event) {
+                            var origin = event.origin || event.originalEvent.origin // For Chrome, the origin property is in the event.originalEvent object.
+                            // if (origin !== /*the container's domain url*/)
+                            // return;
+                            if (typeof event.data == 'object' && event.data.call == 'setData') {
+                                setData(event.data.value)
+                            }
+                        },
+                        false
+                    )
+                    window.parent.postMessage({ type: 'getData', sender: 'popup' }, window.location)
+                }
+                function setData(json) {
+                    var data = JSON.parse(json)
+                    var settings = data && data.settings
+                    renderPlans(data.plans)
+                    document.querySelector('.modal').classList.toggle('modal-lg', settings.modal_lg)
+                    render(data.settings)
+                    if (settings.primary_color) {
+                        var c = settings.primary_color
+                        var stylesheet = document.getElementById('styles')
+                        var styles =
+                            'html{--primary-color:' +
+                            c +
+                            ';}' +
+                            '.btn{border-color:' +
+                            c +
+                            ';}' +
+                            '.btn.btn-primary{background:' +
+                            c +
+                            ';border-color:' +
+                            c +
+                            ';}' +
+                            '.step .step-item a, a:visited{color:' +
+                            c +
+                            ';}' +
+                            '.text-primary, a{color:' +
+                            c +
+                            '!important;}'
+                        stylesheet.innerHTML = styles
+                    }
+                }
+            }
+            // CODE ABOVE IS ONLY FOR PREVIEW MODE ------------------------------------------
+        </script>
+    </body>
+</html>

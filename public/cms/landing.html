@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>KINCHAKU KICKSTART</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style type="text/css" media="screen">
+            html {
+                --main-color: #48ABB0;
+            }
+        </style>
+        <link rel="stylesheet" href="main.css" />
+        <script>
+            function init() {
+                window.addEventListener(
+                    'message',
+                    function(event) {
+                        var origin = event.origin || event.originalEvent.origin // For Chrome, the origin property is in the event.originalEvent object.
+                        // if (origin !== /*the container's domain url*/)
+                        // return;
+                        if (typeof event.data == 'object' && event.data.call == 'setData') {
+                            this.setData(event.data.value)
+                        }
+                    },
+                    false
+                )
+                window.parent.postMessage('getData', window.location)
+                return true
+            }
+            function setData(json) {
+                var landing = JSON.parse(json)
+                document.getElementById('banner').style.backgroundImage =
+                    'url(' + landing.background + ')'
+                // document.getElementById('logo').innerHTML = landing.logo
+                document.getElementById('brand').innerHTML = landing.brand
+                document.getElementById('slogan').innerHTML = landing.slogan
+                document.getElementById('description').innerHTML = landing.description
+                document.getElementById('content').innerHTML = landing.content
+                var pricing = document.getElementById('pricing')
+                pricing.innerHTML = ''
+                for (var i = 0; i < landing.plans.length; i++) {
+                    var plan = landing.plans[i]
+                    var div = document.createElement('div')
+                    div.className = 'box'
+                    var h4 = document.createElement('h4')
+                    var b = document.createElement('b')
+                    var interval = plan.interval
+                    switch (plan.interval) {
+                        case 'month':
+                            interval = '月'
+                            break
+                        case 'year':
+                            interval = '年'
+                            break
+                    }
+                    b.innerHTML = plan.name + ' ' + plan.price + '円／' + interval
+                    h4.appendChild(b)
+                    div.appendChild(h4)
+                    if (plan.description) {
+                        var p = document.createElement('p')
+                        p.innerHTML = plan.description
+                    }
+                    div.appendChild(p)
+                    pricing.appendChild(div)
+                }
+                var html = document.getElementsByTagName('html')[0]
+                html.style.setProperty('--main-color', landing.colors.hex)
+                // html.style.cssText = '--main-color: ' + color
+            }
+        </script>
+    </head>
+    <body onload="init();" class="subpage">
+        <!-- Header -->
+        <header id="header">
+            <div class="inner">
+                <a href="index.html" class="logo" id="brand">KINCHAKU KICKSTART</a>
+                <nav id="nav"><a href="/signin.html">サインイン</a></nav>
+            </div>
+        </header>
+
+        <!-- Banner -->
+        <section id="banner">
+            <div class="inner">
+                <header><h1 id="slogan">Welcome to Yoga Class</h1></header>
+
+                <footer>
+                    <p id="description">
+                        充実のレッスンを提供させていただきます♪
+                        10名のインストラクターと、多数のレッスン、ティーラウンジなど、
+                        「ヨガ」を通じて「生きがい」になれる場所になれるよう、日々精進しております。
+                    </p>
+                </footer>
+            </div>
+        </section>
+
+        <!-- Main -->
+        <section id="main" class="wrapper">
+            <div class="inner">
+                <!-- Elements -->
+                <div class="row" id="content">
+                    <section class="9u 12u$(medium)">
+                        <h3>当スタジオのホームページをご覧いただきありがとうございます。</h3>
+                        <p>
+                            私たちの目指すスタジオは、私たちと同じような考えや体験をお持ちの方がトライしやすく、
+                            ヨガの素晴らしさを感じて頂き、思いっきり楽しんでほしい、
+                            そして「FAMILIAに通ってヨガが好きになった」こんな感想を頂けるスタジオを
+                            目指しています、もちろん経験者の方が満足して頂けるよう多才な個性溢れる
+                            インストラクターにご協力頂き、魅力のあるレッスンもご用意しています。
+                        </p>
+                        <p>
+                            初心者の方には、先ずはヨガの基礎を楽しくレッスンで学んで頂き、
+                            ヨガのある生活を楽しんで頂きたい、そして経験者の方には、
+                            更にステップアップして頂きたいと思っています。
+                        </p>
+                        <p>
+                            最後になりますがFAMILIAは、家族のようなあたたかい場所、
+                            存在になりたいと願いを込めてつけた名前です、わたしたちのスタジオが
+                            皆様にとって、スタジオの名前に相応しい居心地の良い場所となり、
+                            皆様の美と健康を保つためのお役に立てるようスタジオを運営していきます。
+                            皆様のご来店を心からお待ちしております。
+                        </p>
+                    </section>
+                    <section class="3u$ 6u$(medium) 12u$(small)">
+                        <h3>スケジュール</h3>
+                        <ul class="alt">
+                            <li>(月) 10:00 ~ 19:00</li>
+                            <li>(火) 10:00 ~ 19:00</li>
+                            <li>(水) 10:00 ~ 19:00</li>
+                            <li>(木) 10:00 ~ 19:00</li>
+                            <li>(金) 10:00 ~ 21:00</li>
+                            <li>(土) 11:00 ~ 20:00</li>
+                            <li>(日) 11:00 ~ 20:00</li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <div class="inner">
+                <div class="row">
+                    <div class="6u 12u$(small)">
+                        <h3>プラン選択</h3>
+                        <div id="pricing">
+                            <div class="box">
+                                <h4><b>フルタイム会員 10,500円／月</b></h4>
+                                <p>全営業日、1日1レッスンまで1ヶ月間通い放題</p>
+                            </div>
+                            <div class="box">
+                                <h4><b>ナイト会員 9,500円／月</b></h4>
+                                <p>平日17時以降＆土日祝、1日1レッスンまで1ヶ月間通い放題</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="6u$ 12u$(small)">
+                        <h3>会員登録</h3>
+
+                        <form action="#" method="post">
+                            <div class="field">
+                                <label for="name">お名前</label>
+                                <input name="name" id="name" type="text" placeholder="お名前" />
+                            </div>
+                            <div class="field">
+                                <label for="email">メール</label>
+                                <input
+                                    name="email"
+                                    id="email"
+                                    type="email"
+                                    placeholder="メールアドレス"
+                                />
+                            </div>
+                            <ul class="actions">
+                                <li><input value="登録する" class="button alt" type="submit" /></li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

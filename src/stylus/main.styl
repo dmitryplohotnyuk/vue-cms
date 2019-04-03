@@ -1,0 +1,40 @@
+// Typography
+
+$body-font-family := Roboto, '游ゴシック', YuGothic, 'Hiragino Kaku Gothic ProN', Meiryo, 'ＭＳ Ｐゴシック', sans-serif;
+
+$headings := {
+  h1: { size: 112px, weight: 300, line-height: 1, letter-spacing: -.04em, font-family: $heading-font-family },
+  h2: { size: 56px, weight: 400, line-height: 1.35, letter-spacing: -.02em, font-family: $heading-font-family },
+  h3: { size: 24px, weight: normal, line-height: 1.33, letter-spacing: normal, font-family: $heading-font-family },
+  h4: { size: 34px, weight: 400, line-height: 40px, letter-spacing: normal, font-family: $heading-font-family },
+  h5: { size: 24px, weight: 400, line-height: 32px, letter-spacing: normal, font-family: $heading-font-family },
+  h6: { size: 20px, weight: 500, line-height: 1, letter-spacing: .02em, font-family: $heading-font-family },
+  subheading: { size: 16px, weight: 400 },
+  body-2: { size: 14px, weight: 500 },
+  body-1: { size: 12px, weight: normal },
+  caption: { size: 13px, weight: normal, line-height: 1.85},
+  button: { size: 14px, weight: 500 }
+}
+$font-size-root := 14px
+$line-height-root := 1.5
+
+// Button
+$button-border-radius := 2px
+$button-height := 36px
+$button-font-size := 14px
+$button-font-weight := 500
+$button-margin-y := 6px
+$button-margin-x := 8px
+$button-margin := $button-margin-y $button-margin-x
+$button-min-width := 88px
+$button-small-padding := 0 8px
+$button-padding := 0 32px
+$button-large-padding := 0 32px
+$button-text-transform := capitalize
+
+@import '~vuetify/src/stylus/main'
+
+a {
+    color: rgb(48, 63, 159);
+    text-decoration: none;
+}

@@ -1,0 +1,139 @@
+version: 2.0
+jobs:
+  dev:
+    working_directory: ~/frontend
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - run: sudo apt install -y rsync
+      - restore_cache:
+          keys:
+            - node-cache-{{ checksum "package.json" }}
+            - node-cache-{{ .Branch }}
+      - run:
+          name: Run yarn install
+          environment:
+            CYPRESS_INSTALL_BINARY: 0
+          command: yarn install
+      - save_cache:
+          key: node-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - save_cache:
+          key: node-cache-{{ .Branch }}
+          paths:
+            - node_modules
+      - run:
+          name: Build dev
+          command: VUE_APP_POE_KEY=$POE_KEY VUE_APP_POE_ID=$POE_ID VUE_APP_STRIPE_KEY=$STRIPE_KEY_DEV yarn dev-build
+      - deploy:
+          name: Deploy
+          command: |
+            if [[ "$CIRCLE_BRANCH" == "develop" ]]; then
+              rsync -e "ssh -o StrictHostKeyChecking=no -p ${SSH_PORT_DEV}" -arvcO --no-t --exclude .git ~/frontend/dist/ ubuntu@$SSH_HOST_DEV:/var/www/frontend
+            else
+              echo "Skipping deploy for feature branch"
+            fi
+
+  stage:
+    working_directory: ~/frontend
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-cache-{{ checksum "package.json" }}
+            - node-cache-{{ .Branch }}
+      - run:
+          name: Run yarn install
+          environment:
+            CYPRESS_INSTALL_BINARY: 0
+          command: yarn install
+      - save_cache:
+          key: node-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - save_cache:
+          key: node-cache-{{ .Branch }}
+          paths:
+            - node_modules
+      - run:
+          name: Build prod
+          command: VUE_APP_STRIPE_KEY=$STRIPE_KEY_DEV VUE_APP_BASE_URI=$BASE_URI_STAGE yarn build
+      - deploy:
+          name: Deploy
+          command: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $SSH_PORT_STAGE -r ~/frontend/dist $SSH_USER_STAGE@$SSH_HOST_STAGE:/var/www/frontend_new
+      - deploy:
+          name: Switch to new version
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p $SSH_PORT_STAGE $SSH_USER_STAGE@$SSH_HOST_STAGE "mv /var/www/frontend_new /var/www/frontend_${CIRCLE_SHA1} && ln -s -n -f -T /var/www/frontend_${CIRCLE_SHA1} /var/www/frontend"
+
+  prod:
+    working_directory: ~/frontend
+    docker:
+      - image: circleci/node
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - node-cache-{{ checksum "package.json" }}
+            - node-cache-{{ .Branch }}
+      - run:
+          name: Run yarn install
+          environment:
+            CYPRESS_INSTALL_BINARY: 0
+          command: yarn install
+      - save_cache:
+          key: node-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - save_cache:
+          key: node-cache-{{ .Branch }}
+          paths:
+            - node_modules
+      - run:
+          name: Build prod
+          command: VUE_APP_STRIPE_KEY=$STRIPE_KEY_PROD yarn build
+      - deploy:
+          name: Deploy
+          command: scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -P $SSH_PORT_PROD -r ~/frontend/dist $SSH_USER_PROD@$SSH_HOST_PROD:/var/www/frontend_new
+      - deploy:
+          name: Switch to new version
+          command: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -p $SSH_PORT_PROD $SSH_USER_PROD@$SSH_HOST_PROD "mv /var/www/frontend_new /var/www/frontend_${CIRCLE_SHA1} && ln -s -n -f -T /var/www/frontend_${CIRCLE_SHA1} /var/www/frontend"
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - dev:
+          filters:
+            branches:
+              only:
+                - develop
+                - /feature\/.*/
+      - e2e:
+          filters:
+            branches:
+              only:
+                - /e2e\/.*/
+      - stage:
+          filters:
+            branches:
+              only:
+                - master
+      - hold:
+          type: approval
+          requires:
+           - stage
+          filters:
+            branches:
+              only:
+                - master
+      - prod:
+          filters:
+            branches:
+              only: master
+          requires:
+            - hold
+

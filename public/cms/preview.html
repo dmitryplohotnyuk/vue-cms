@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>KINCHAKU KICKSTART</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre.min.css" />
+        <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-exp.min.css" />
+        <link rel="stylesheet" href="https://unpkg.com/spectre.css/dist/spectre-icons.min.css" />
+        <style media="screen">
+            [v-cloak] {
+                display: none;
+            }
+        </style>
+        <link rel="stylesheet" href="utils.css" />
+        <link rel="stylesheet" href="preview.css" />
+    </head>
+    <body>
+        <style id="styles" media="screen">
+            /* Dynamic styles here */
+        </style>
+
+        <div id="app" v-cloak @click="onClick" class="lang-ja">
+            <div class="off-canvas" v-if="ready">
+                <div class="off-canvas-sidebar" :class="{active: isSidebarOpened}">
+                    <!-- off-screen sidebar -->
+                    <ul class="nav">
+                        <li class="nav-item" v-for="item in mainMenu" :key="item.name">
+                            <a
+                                :href="item.link"
+                                :style="buildStyle(landing.theme.colors, {'color': 'headerLinks'})"
+                            >
+                                {{ item.name }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <a class="off-canvas-overlay" @click="isSidebarOpened = false"></a>
+
+                <div class="off-canvas-content p-0">
+                    <!-- off-screen content -->
+                    <div>
+                        <!-- Announcemet -->
+                        <announcement-block
+                            :landing="landing"
+                            :block="announcementBlock"
+                            :build-style="buildStyle"
+                        />
+                    </div>
+
+                    <div
+                        :class="{'p-sticky': landing.theme.blocks.header && landing.theme.blocks.header.settings.isSticky}"
+                        style="top: 0; z-index: 10"
+                    >
+                        <!-- Header -->
+                        <header-block
+                            :landing="landing"
+                            :block="landing.theme.blocks.header"
+                            :build-style="buildStyle"
+                            @sidebar="isSidebarOpened = true"
+                        />
+                    </div>
+
+                    <!-- Blocks -->
+                    <div v-for="(block, index) in landing.page.blocks" :key="index">
+                        <div v-if="block.type == 'hero'">
+                            <!-- Hero -->
+                            <hero-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+
+                        <div v-else-if="block.type == 'rich'">
+                            <!-- Rich -->
+                            <rich-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+
+                        <div v-else-if="block.type == 'plans'">
+                            <!-- Plans -->
+                            <plans-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+
+                        <div v-else-if="block.type == 'slideshow'">
+                            <!-- Slideshow -->
+                            <slideshow-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+
+                        <div v-else-if="block.type == 'content'">
+                            <!-- Content -->
+                            <content-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+
+                        <div v-else-if="block.type == 'form'">
+                            <!-- Form -->
+                            <form-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+
+                        <div v-else-if="block.type == 'subscription'">
+                            <subscription-block
+                                :landing="landing"
+                                :block="block"
+                                :build-style="buildStyle"
+                            />
+                        </div>
+                    </div>
+
+                    <div>
+                        <!-- Footer -->
+                        <footer-block
+                            :landing="landing"
+                            :block="landing.theme.blocks.footer"
+                            :build-style="buildStyle"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+        <script src="https://unpkg.com/http-vue-loader"></script>
+        <script src="preview.js"></script>
+    </body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<% if (process.env.VUE_APP_ENV == 'production'){ %>
+        <link rel="icon" href="<%= BASE_URL %>favicon.ico?v=2" />
+<% } %><% if (process.env.VUE_APP_ENV != 'production'){ %>
+        <link rel="icon" href="<%= BASE_URL %>favicon-dev.ico" />
+<% } %>
+        <meta name="msapplication-TileColor" content="#ffffff" />
+        <title>Kinchaku</title>
+        <link href="/flag-icon/css/flag-icon.css" type="text/css" rel="stylesheet" />
+<% if (process.env.VUE_APP_ENV == 'production'){ %>
+        <!-- Google Tag Manager -->
+        <script>
+            ;(function(w, d, s, l, i) {
+                w[l] = w[l] || []
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+                var f = d.getElementsByTagName(s)[0],
+                    j = d.createElement(s),
+                    dl = l != 'dataLayer' ? '&l=' + l : ''
+                j.async = true
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+                f.parentNode.insertBefore(j, f)
+            })(window, document, 'script', 'dataLayer', 'GTM-TC7PSHM')
+        </script>
+        <!-- End Google Tag Manager -->
+<% } %>
+<% if (process.env.VUE_APP_ENV != 'production' && process.env.VUE_APP_ENV != 'local'){ %>
+        <script>
+            (function(name,host,id,ctx){ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName('head')[0],s=document.createElement('script'),w=window,loaded;s.onload=s.onerror=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;ctx[name].ready(fn)};s.async=1;s.src=host+'/js?id='+id;h.parentNode.insertBefore(s,h)}}})
+            ('aizu','https://dev.kinchaku.com/aizu','50c4814f-ee3c-4da0-8c2b-507dfd653fc4',this);
+            aizu.ready(function() {
+                aizu.init({text: 'Subscribe to our services'})
+            });
+        </script>
+<% } %><% if (process.env.VUE_APP_ENV == 'local'){ %>
+        <script>
+            (function(name,host,id,ctx){ctx[name]=ctx[name]||{ready:function(fn){var h=document.getElementsByTagName('head')[0],s=document.createElement('script'),w=window,loaded;s.onload=s.onerror=s.onreadystatechange=function(){if((s.readyState&&!(/^c|loade/.test(s.readyState)))||loaded){return}s.onload=s.onreadystatechange=null;loaded=1;ctx[name].ready(fn)};s.async=1;s.src=host+'/js?id='+id;h.parentNode.insertBefore(s,h)}}})
+            ('aizu','http://localhost:8081','89659bf2-9937-47e0-8b0c-a8eb2f016e1f',this);
+            aizu.ready(function() {
+                aizu.init()
+            });
+        </script>
+<% } %>
+    </head>
+    <body>
+        <div id="browser_check">
+            <style type="text/css" media="screen">
+                #browser {
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    z-index: 10;
+                    width: 100%;
+                    font-size: 18px;
+                    font-family: 'Roboto', sans-serif;
+                    text-align: center;
+                    padding: 16px 0;
+                    margin: auto 64px auto 0;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+                    background-color: #f5f5f5;
+                }
+            </style>
+            <script type="text/javascript">
+function skipCheck(cookie){if(window!==undefined){var browserDiv=document.getElementById('browser_check');browserDiv.parentNode.removeChild(browserDiv);if(cookie&&document.cookie.indexOf('ignoreupdate=true')==-1){setIgnoreCookie()}}}function setIgnoreCookie(){document.cookie='ignoreupdate=true; expires='+new Date(new Date().getTime()+3600000*24*7).toGMTString()+'; path=/'}function getVersion(userAgent,keyword,retrieveLength){return userAgent.slice(userAgent.indexOf(keyword)+keyword.length,userAgent.indexOf(keyword)+keyword.length+retrieveLength)}function getBrowser(){if(window===undefined){return ''}var browser='';var version=0;var versionText='';var supported=false;var userAgent=navigator.userAgent;if(userAgent.indexOf('Vivaldi')>-1||userAgent.indexOf('YaBrowser')>-1){browser='Not officially supported'}else if(userAgent.indexOf('Edge')>-1){browser='Edge';version=getVersion(userAgent,'Edge/',2);supported=version>14}else if(userAgent.indexOf('MSIE')>-1||userAgent.indexOf('Trident')>-1){browser='Internet Explorer';if(!!window.MSInputMethodContext&&!!document.documentMode){version=11;supported=true}else{versionText='lower than 11'}}else if(userAgent.indexOf('Firefox')>-1){browser='Firefox';version=getVersion(userAgent,'Firefox/',2);supported=version>56}else if(userAgent.indexOf('Safari')>-1&&userAgent.indexOf('Chrome')<0&&userAgent.indexOf('Chromium')<0){browser='Safari';version=getVersion(userAgent,'Version/',2);supported=version>9}else if(userAgent.indexOf('OPR')>-1||userAgent.indexOf('Opera')>-1){browser='Opera';if(userAgent.indexOf('Opera')<0){version=getVersion(userAgent,'OPR/',2);supported=version>49}}else if(userAgent.indexOf('Chrome')>-1&&userAgent.indexOf('Chromium')<0){browser='Chrome';version=getVersion(userAgent,'Chrome/',2);supported=version>64}else{browser='Not officially supported';supported=false}var userLang=navigator.language||navigator.userLanguage;if(!versionText){versionText=version.toString()}var brow_name=browser+' '+versionText;var browserHtml='';if(supported){return false}if(userLang.indexOf('ja')!==-1){browserHtml='<p>お使いのブラウザ (<strong>{brow_name}</strong>) は最新版ではございません。Kinchakuでのさらなるセキュリティ、速度および最高の体験のためにお使いのブラウザーを更新してください。</p>';browserHtml+='<a class="danger--text" style="cursor:pointer; margin-right: 10px" onClick="skipCheck(true)">無視する</a>&nbsp;<a href="https://browser-update.org/update-browser.html">ブラウザをアップデートする</a>'}else{browserHtml='<p>Your web browser (<strong>{brow_name}</strong>) is out of date. Kinchaku works best on Chrome, Safari 10+, Firefox, Edge, IE 11+. <br/> Update your browser to experience the best performance.</p>';browserHtml+='<a class="danger--text" style="cursor:pointer; margin-right: 10px" onClick="skipCheck()">Ignore</a>&nbsp;<a href="https://browser-update.org/update-browser.html">View Browsers</a>'}browserHtml=browserHtml.replace('{brow_name}',brow_name);return browserHtml}if(window!==undefined){if(document.cookie.indexOf('ignoreupdate=true')==-1){var browserHtml=getBrowser();if(!browserHtml){skipCheck()}else{var browserDiv=document.createElement('div');browserDiv.id='browser';browserDiv.innerHTML=browserHtml;document.getElementById('browser_check').appendChild(browserDiv)}}else{skipCheck()}}
+            </script>
+        </div>
+        <% if (process.env.VUE_APP_ENV == 'production'){ %>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript>
+            <iframe
+                src="https://www.googletagmanager.com/ns.html?id=GTM-TC7PSHM"
+                height="0"
+                width="0"
+                style="display:none;visibility:hidden"></iframe>
+        </noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <% } %>
+        <script type="text/javascript">
+            if (/Trident.*rv:/.test(navigator.userAgent))
+                document.write('<script src="/js/polyfill.min.js"><\/script>')
+        </script>
+        <noscript>
+            <strong>
+                We're sorry but Kinchaku doesn't work properly without JavaScript enabled. Please
+                enable it to continue.
+            </strong>
+        </noscript>
+        <div id="app"></div>
+        <!-- built files will be auto injected -->
+<% if (process.env.VUE_APP_ENV == 'production'){ %>
+        <script type="text/javascript">
+            !(function(e, t, n) {
+                function a() {
+                    var e = t.getElementsByTagName('script')[0],
+                        n = t.createElement('script')
+                    ;(n.type = 'text/javascript'),
+                        (n.async = !0),
+                        (n.src = 'https://beacon-v2.helpscout.net'),
+                        e.parentNode.insertBefore(n, e)
+                }
+                if (
+                    ((e.Beacon = n = function(t, n, a) {
+                        e.Beacon.readyQueue.push({ method: t, options: n, data: a })
+                    }),
+                    (n.readyQueue = []),
+                    'complete' === t.readyState)
+                )
+                    return a()
+                e.attachEvent ? e.attachEvent('onload', a) : e.addEventListener('load', a, !1)
+            })(window, document, window.Beacon || function() {})
+        </script>
+        <script type="text/javascript">
+            window.Beacon('init', 'bfdd01a1-dd16-46ec-ac6b-64abb554eb2c')
+        </script>
+<% } %>
+    </body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <title>KINCHAKU KICKSTART</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style media="screen">
+            [v-cloak] {
+                display: none;
+            }
+            html,
+            body {
+                background: transparent;
+                padding: 0;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <script>
+            /* global aizu */
+            init()
+
+            function init() {
+                window.addEventListener(
+                    'message',
+                    function(event) {
+                        //var origin = event.origin || event.originalEvent.origin // For Chrome, the origin property is in the event.originalEvent object.
+                        // if (origin !== /*the container's domain url*/)
+                        // return;
+                        if (typeof event.data == 'object' && event.data.call == 'setData') {
+                            setData(event.data.value)
+                        }
+                    },
+                    false
+                )
+                window.parent.postMessage({ type: 'getData', sender: 'banner' }, window.location)
+                return true
+            }
+
+            function setData(json) {
+                var landing = JSON.parse(json)
+                window.landing = landing
+                initBeacon()
+            }
+
+            function initBeacon() {
+                if (!window.landing) {
+                    return
+                }
+                if (typeof aizu !== 'undefined') {
+                    render()
+                    return
+                }
+                eval(window.landing.bannerCode)
+            }
+
+            function render() {
+                const settings = window.landing.settings
+                var notice = document.querySelector('p.notice')
+                var button = notice.querySelector('a')
+                if (settings.background_color) {
+                    notice.style.backgroundColor = settings.background_color
+                }
+                if (settings.text_size) {
+                    notice.style.fontSize = settings.text_size
+                }
+                if (settings.button_text) {
+                    button.innerText = settings.button_text
+                }
+                if (settings.primary_color) {
+                    notice.style.color = settings.primary_color
+                    button.style.color = settings.primary_color
+                    button.style.borderColor = settings.primary_color
+                }
+                if (settings.text) {
+                    button.previousSibling.nodeValue = settings.text
+                }
+
+            }
+        </script>
+    </body>
+</html>
