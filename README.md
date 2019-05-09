@@ -1,5 +1,3 @@
-# Kinchaku Frontend
-
 ## Installation
 
 ```bash
